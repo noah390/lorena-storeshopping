@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        /* Loader Styles */
+        #loader-bg {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(255,255,255,0.95);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.3s;
+        }
+        .loader {
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #e75480;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+    <link rel="stylesheet" href="css/presidential.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Lorena Store</title>
+    <link rel="stylesheet" href="css/content.css">
+    <style>
+        body { font-family: Lato, sans-serif; background: #f7f7f7; }
+        .dashboard { max-width: 700px; margin: 60px auto; background: #fff; padding: 2em; border-radius: 8px; box-shadow: 0 2px 8px #0001; }
+        h2 { color: #e75480; }
+        .logout {
+            float: right;
+            background: #e75480;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 20px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            margin-left: 10px;
+            transition: background 0.2s, color 0.2s;
+            box-shadow: 0 2px 8px #e7548010;
+        }
+        .logout:hover {
+            background: #222;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div id="loader-bg"><div class="loader"></div></div>
+    <div class="dashboard">
+    <button class="logout" onclick="logout()">Logout</button>
+        <h2>Welcome, Admin!</h2>
+        <h3 style="margin-top:2em; color:#222;">Add New Product</h3>
+        <form id="addProductForm" style="margin-bottom:2em;">
+            <input type="text" id="prodName" placeholder="Product Name" required>
+            <input type="text" id="prodBrand" placeholder="Brand" required>
+            <input type="number" id="prodPrice" placeholder="Price (₦)" required>
+            <input type="text" id="prodImage" placeholder="Image URL" required>
+            <button type="submit">Add Product</button>
+        </form>
+        <h3 style="color:#222;">Product List</h3>
+        <div id="productList"></div>
+        <h3 style="color:#888; margin-top:2em;">Removed Products</h3>
+        <div id="removedProductList"></div>
+    </div>
+    <script>
+        // Hide loader when page is fully loaded
+        window.addEventListener('load', function() {
+            var loader = document.getElementById('loader-bg');
+            if(loader) loader.style.opacity = 0;
+            setTimeout(function() {
+                if(loader) loader.style.display = 'none';
+            }, 400);
+        });
+        if(localStorage.getItem('isAdmin') !== 'true') {
+            window.location.href = 'admin.html';
+        }
+        function logout() {
+            localStorage.removeItem('isAdmin');
+            window.location.href = 'admin.html';
+        }
+
+        // Product management logic (localStorage for demo)
+        function getAdminProducts() {
+            return JSON.parse(localStorage.getItem('adminProducts') || '[]');
+        }
+        function setAdminProducts(products) {
+            localStorage.setItem('adminProducts', JSON.stringify(products));
+        }
+        // Hide removed API products locally
+        function getHiddenApiProductIds() {
+            return JSON.parse(localStorage.getItem('hiddenApiProducts') || '[]');
+        }
+        function setHiddenApiProductIds(ids) {
+            localStorage.setItem('hiddenApiProducts', JSON.stringify(ids));
+        }
+        function renderRemovedProducts() {
+            const removedList = document.getElementById('removedProductList');
+            fetch('https://5d76bf96515d1a0014085cf9.mockapi.io/product')
+                .then(res => res.json())
+                .then(apiProducts => {
+                    let hiddenApiIds = getHiddenApiProductIds();
+                    let removedProducts = apiProducts.filter(p => hiddenApiIds.includes(p.id));
+                    if(removedProducts.length === 0) {
+                        removedList.innerHTML = '<em>No removed products.</em>';
+                        return;
+                    }
+                    removedList.innerHTML = removedProducts.map((p, i) => `
+                        <div style=\"border:1px solid #eee; border-radius:6px; margin:10px 0; padding:10px; display:flex; align-items:center; justify-content:space-between;\">
+                            <div style=\"display:flex; align-items:center;\">
+                                <img src=\"${p.preview}\" alt=\"${p.name}\" style=\"width:60px;height:60px;object-fit:cover;border-radius:4px;margin-right:15px;\">
+                                <div>
+                                    <b>${p.name}</b><br>
+                                    <span style='color:#888;'>${p.brand}</span><br>
+                                    <span style='color:#e75480;'>₦${p.price}</span>
+                                </div>
+                            </div>
+                            <button onclick=\"restoreProduct('${p.id}')\" style=\"background:#4caf50;color:#fff;border:none;padding:8px 14px;border-radius:4px;cursor:pointer;\">Restore</button>
+                        </div>
+                    `).join('');
+                });
+        }
+        function restoreProduct(id) {
+            let hidden = getHiddenApiProductIds();
+            hidden = hidden.filter(pid => pid !== id);
+            setHiddenApiProductIds(hidden);
+            renderProducts();
+            renderRemovedProducts();
+        }
+    function renderProducts() {
+            const list = document.getElementById('productList');
+            fetch('https://5d76bf96515d1a0014085cf9.mockapi.io/product')
+                .then(res => res.json())
+                .then(apiProducts => {
+                    let adminProducts = getAdminProducts();
+                    let hiddenApiIds = getHiddenApiProductIds();
+                    // Map admin products to match API structure
+                    let mappedAdminProducts = adminProducts.map((p, idx) => ({
+                        id: 'admin-' + idx,
+                        name: p.name,
+                        brand: p.brand,
+                        price: p.price,
+                        preview: p.image,
+                        isAdmin: true
+                    }));
+                    // Map API products, filter out hidden
+                    let mappedApiProducts = apiProducts.filter(p => !hiddenApiIds.includes(p.id)).map(p => ({
+                        id: p.id,
+                        name: p.name,
+                        brand: p.brand,
+                        price: p.price,
+                        preview: p.preview,
+                        isAdmin: false
+                    }));
+                    let allProducts = mappedApiProducts.concat(mappedAdminProducts);
+                    if(allProducts.length === 0) {
+                        list.innerHTML = '<em>No products found.</em>';
+                        return;
+                    }
+                    list.innerHTML = allProducts.map((p, i) => `
+                        <div style=\"border:1px solid #eee; border-radius:6px; margin:10px 0; padding:10px; display:flex; align-items:center; justify-content:space-between;\">
+                            <div style=\"display:flex; align-items:center;\">
+                                <img src=\"${p.preview}\" alt=\"${p.name}\" style=\"width:60px;height:60px;object-fit:cover;border-radius:4px;margin-right:15px;\">
+                                <div>
+                                    <b>${p.name}</b><br>
+                                    <span style='color:#888;'>${p.brand}</span><br>
+                                    <span style='color:#e75480;'>₦${p.price}</span>
+                                </div>
+                            </div>
+                            <button onclick=\"removeProduct(${i})\" style=\"background:#e75480;color:#fff;border:none;padding:8px 14px;border-radius:4px;cursor:pointer;\">Remove</button>
+                        </div>
+                    `).join('');
+                });
+        }
+        function removeProduct(idx) {
+            // Rebuild the full list to determine if it's API or admin
+            fetch('https://5d76bf96515d1a0014085cf9.mockapi.io/product')
+                .then(res => res.json())
+                .then(apiProducts => {
+                    let adminProducts = getAdminProducts();
+                    let hiddenApiIds = getHiddenApiProductIds();
+                    let mappedAdminProducts = adminProducts.map((p, idx) => ({
+                        id: 'admin-' + idx,
+                        isAdmin: true
+                    }));
+                    let mappedApiProducts = apiProducts.filter(p => !hiddenApiIds.includes(p.id)).map(p => ({
+                        id: p.id,
+                        isAdmin: false
+                    }));
+                    let allProducts = mappedApiProducts.concat(mappedAdminProducts);
+                    let prod = allProducts[idx];
+                    if(prod.isAdmin) {
+                        // Remove from admin products
+                        let adminIdx = idx - mappedApiProducts.length;
+                        let products = getAdminProducts();
+                        products.splice(adminIdx, 1);
+                        setAdminProducts(products);
+                    } else {
+                        // Hide API product locally
+                        let hidden = getHiddenApiProductIds();
+                        hidden.push(prod.id);
+                        setHiddenApiProductIds(hidden);
+                    }
+                    renderProducts();
+                });
+        }
+        document.getElementById('addProductForm').onsubmit = function(e) {
+            e.preventDefault();
+            const name = document.getElementById('prodName').value.trim();
+            const brand = document.getElementById('prodBrand').value.trim();
+            const price = document.getElementById('prodPrice').value;
+            const image = document.getElementById('prodImage').value.trim();
+            if(!name || !brand || !price || !image) return;
+            let products = getAdminProducts();
+            products.push({ name, brand, price, image });
+            setAdminProducts(products);
+            renderProducts();
+            this.reset();
+        };
+    renderProducts();
+    renderRemovedProducts();
+    </script>
+</body>
+</html>

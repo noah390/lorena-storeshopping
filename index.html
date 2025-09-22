@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        /* Loader Styles */
+        #loader-bg {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(255,255,255,0.95);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.3s;
+        }
+        .loader {
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #e75480;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+    <link rel="stylesheet" href="css/presidential.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- <link rel="stylesheet" href="/style.css"> -->
+    <title> E-COMMERCE WEBSITE BY EDYODA | CREATED BY PRIYANKA SHARMA </title>
+    <!-- favicon -->
+    <link rel="icon" href="https://yt3.ggpht.com/a/AGF-l78km1YyNXmF0r3-0CycCA0HLA_i6zYn_8NZEg=s900-c-k-c0xffffffff-no-rj-mo" type="image/gif" sizes="16x16">
+    <!-- header links -->
+    <script src="https://kit.fontawesome.com/4a3b1f73a2.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Lato&display=swap" rel="stylesheet">
+    <!-- slider links -->
+    <!-- <script src="http://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script> -->
+    <script src="js/jQuery3.4.1.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick-theme.min.css">
+</head>
+
+<body>
+    <div id="loader-bg"><div class="loader"></div></div>
+    <!-- ADVERTISEMENT SLIDER -->
+    <div id="adSliderWrapper" style="max-width:600px;margin:2em auto 1.5em auto;">
+        <div id="adSlider" style="position:relative;overflow:hidden;height:110px;border-radius:14px;box-shadow:0 2px 12px #e7548033;background:#fff;">
+            <div class="ad-slide" style="position:absolute;width:100%;height:100%;display:flex;align-items:center;justify-content:center;transition:opacity 0.7s;opacity:1;z-index:2;background:#fff0f6;">
+                <b style="color:#e75480;font-size:1.2em;">Vacant</b>&nbsp;&nbsp;<span style="color:#888;font-size:1em;">Advertise your business here!</span>
+            </div>
+            <div class="ad-slide" style="position:absolute;width:100%;height:100%;display:flex;align-items:center;justify-content:center;transition:opacity 0.7s;opacity:0;z-index:1;background:#f7f7fa;">
+                <b style="color:#e75480;font-size:1.2em;">Lorena Store</b>&nbsp;&nbsp;<span style="color:#222;font-size:1em;">Shop premium fashion and accessories. <a href="index.html" style="color:#e75480;text-decoration:underline;">Visit Now</a></span>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Hide loader when page is fully loaded
+        window.addEventListener('load', function() {
+            var loader = document.getElementById('loader-bg');
+            if(loader) loader.style.opacity = 0;
+            setTimeout(function() {
+                if(loader) loader.style.display = 'none';
+            }, 400);
+        });
+    // Simple sliding animation for ad space
+    (function() {
+        const slides = document.querySelectorAll('#adSlider .ad-slide');
+        let current = 0;
+        setInterval(() => {
+            slides[current].style.opacity = 0;
+            slides[current].style.zIndex = 1;
+            current = (current + 1) % slides.length;
+            slides[current].style.opacity = 1;
+            slides[current].style.zIndex = 2;
+        }, 3500);
+    })();
+    </script>
+    <!-- HEADER -->
+    <div id="header-section"></div>
+    <!-- SLIDER -->
+    <div id="slider-section"></div>
+    <!-- CONTENT SECTION -->
+    <div id="content-section"></div>
+    <!-- FOOTER -->
+    <div id="footer-section"></div>
+
+    <script>
+        function loadSection(id, url) {
+            var req = new XMLHttpRequest();
+            req.open("GET", url, false);
+            req.send(null);
+            document.getElementById(id).innerHTML = req.responseText;
+        }
+        loadSection("header-section", "header.html");
+        loadSection("slider-section", "slider.html");
+        loadSection("content-section", "content.html");
+        loadSection("footer-section", "footer.html");
+    </script>
+
+</body>
+
+<!-- slider JS START -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.js"></script>
+<script>
+    $(document).ready(function()
+    {
+    $('#containerSlider').slick({
+        dots: true,
+        infinite: true,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        autoplay: true,
+        autoplaySpeed: 1500,
+        });
+    });
+</script>
+<!-- slider JS ENDS -->
+
+<!-- content JS -->
+<script src="content.js"></script>
+
+</html>

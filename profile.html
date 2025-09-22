@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        /* Loader Styles */
+        #loader-bg {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(255,255,255,0.95);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.3s;
+        }
+        .loader {
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #e75480;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+    <link rel="stylesheet" href="css/presidential.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - Lorena Store</title>
+    <link rel="stylesheet" href="css/content.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        body { font-family: 'Roboto', Lato, sans-serif; background: #f5f5f5; }
+        .profile-header {
+            background: #fff;
+            border-bottom: 3px solid #e75480;
+            padding: 1.2em 0 1em 0;
+            text-align: center;
+            margin-bottom: 0.5em;
+        }
+        .profile-header .jumia-logo {
+            font-size: 2em;
+            color: #e75480;
+            font-weight: bold;
+            letter-spacing: 2px;
+            font-family: 'Roboto', sans-serif;
+        }
+        .profile-container {
+            max-width: 420px;
+            margin: 30px auto 0 auto;
+            background: #fff;
+            padding: 2.2em 2em 2em 2em;
+            border-radius: 14px;
+            box-shadow: 0 4px 24px #0001;
+        }
+        h2 {
+            text-align: center;
+            color: #222;
+            font-weight: 700;
+            margin-bottom: 1.2em;
+        }
+        .profile-pic {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 1.5em;
+            position: relative;
+        }
+        .profile-pic img {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #e75480;
+            margin-bottom: 0.5em;
+            background: #fff;
+        }
+        .profile-pic input[type="file"] {
+            display: none;
+        }
+        .profile-pic label {
+            position: absolute;
+            bottom: 18px;
+            right: 110px;
+            background: #e75480;
+            color: #fff;
+            padding: 7px 10px 7px 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.1em;
+            border: 2px solid #fff;
+            box-shadow: 0 2px 8px #0002;
+            transition: background 0.2s;
+        }
+        .profile-pic label:hover {
+            background: #222;
+        }
+        .info {
+            margin: 20px 0;
+            text-align: center;
+        }
+        .info input, .info label {
+            display: block;
+            margin: 0.5em auto;
+            width: 90%;
+            max-width: 300px;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 1.08em;
+        }
+        .info label {
+            background: none;
+            color: #444;
+            font-weight: 500;
+            text-align: left;
+            width: 90%;
+            max-width: 300px;
+            padding: 0;
+            border: none;
+        }
+        .save-btn {
+            background: #e75480;
+            color: #fff;
+            border: none;
+            font-weight: bold;
+            padding: 13px;
+            border-radius: 6px;
+            font-size: 1.1em;
+            letter-spacing: 1px;
+            cursor: pointer;
+            width: 90%;
+            max-width: 300px;
+            margin: 1em auto 0 auto;
+            display: block;
+            transition: background 0.2s;
+        }
+        .save-btn:hover {
+            background: #222;
+        }
+        .profile-summary {
+            margin-top: 2em;
+            padding: 1.5em 1em;
+            background: #f7f7f7;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px #0001;
+            text-align: center;
+        }
+        .profile-summary h3 {
+            color: #e75480;
+            margin-bottom: 1em;
+        }
+        .profile-summary .profile-summary-img {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #e75480;
+            margin-bottom: 0.7em;
+        }
+        .profile-summary .profile-summary-row {
+            margin: 0.5em 0;
+            font-size: 1.08em;
+        }
+        .profile-summary .products-btn {
+            margin-top: 1.2em;
+            background: #e75480;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 28px;
+            font-size: 1.08em;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .profile-summary .products-btn:hover {
+            background: #222;
+        }
+        .logout {
+            color: #f68b1e;
+            text-align: center;
+            cursor: pointer;
+            display: block;
+            margin-top: 20px;
+            font-weight: 500;
+        }
+        .success-msg {
+            color: #4caf50;
+            text-align: center;
+            margin-top: 10px;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div id="loader-bg"><div class="loader"></div></div>
+    <div class="profile-header">
+        <span class="jumia-logo"><i class="fa-solid fa-star"></i> JUMIA</span>
+    </div>
+    <div class="profile-container" id="profileContainer">
+        <h2>My Account</h2>
+        <div class="profile-pic">
+            <img id="profileImg" src="https://ui-avatars.com/api/?name=User&background=e75480&color=fff" alt="Profile Picture">
+            <label for="imgUpload" title="Change Photo"><i class="fa fa-camera"></i></label>
+            <input type="file" id="imgUpload" accept="image/*">
+        </div>
+        <form class="info" id="profileForm">
+            <label for="profileUser">Username</label>
+            <input type="text" id="profileUser" readonly>
+            <label for="profileAge">Age</label>
+            <input type="number" id="profileAge" min="1" max="120" placeholder="Enter your age" required>
+            <label for="profileDob">Date of Birth</label>
+            <input type="date" id="profileDob" required>
+            <button class="save-btn" type="submit">Save Details</button>
+            <div id="successMsg" class="success-msg" style="display:none;">Profile updated successfully!</div>
+        </form>
+        <span class="logout" onclick="logout()">Logout</span>
+    </div>
+    <script>
+        // Hide loader when page is fully loaded
+        window.addEventListener('load', function() {
+            var loader = document.getElementById('loader-bg');
+            if(loader) loader.style.opacity = 0;
+            setTimeout(function() {
+                if(loader) loader.style.display = 'none';
+            }, 400);
+        });
+        const user = localStorage.getItem('currentUser');
+        if(!user) {
+            window.location.href = 'login.html';
+        }
+        // Load profile data
+        let users = JSON.parse(localStorage.getItem('users') || '{}');
+        let profile = users[user] || {};
+        document.getElementById('profileUser').value = user;
+        document.getElementById('profileAge').value = profile.age || '';
+        document.getElementById('profileDob').value = profile.dob || '';
+        // Profile image
+        let img = profile.img || '';
+        if(img) {
+            document.getElementById('profileImg').src = img;
+        } else {
+            document.getElementById('profileImg').src = `https://ui-avatars.com/api/?name=${encodeURIComponent(user)}&background=e75480&color=fff`;
+        }
+        // Image upload
+        document.getElementById('imgUpload').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if(file) {
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    document.getElementById('profileImg').src = evt.target.result;
+                    profile.img = evt.target.result;
+                    users[user] = profile;
+                    localStorage.setItem('users', JSON.stringify(users));
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        // Save details
+        document.getElementById('profileForm').onsubmit = function(e) {
+            e.preventDefault();
+            // Validate required fields
+            const age = document.getElementById('profileAge').value;
+            const dob = document.getElementById('profileDob').value;
+            if(!age || !dob) {
+                document.getElementById('successMsg').style.display = 'none';
+                alert('Please fill in all required fields.');
+                return;
+            }
+            profile.age = age;
+            profile.dob = dob;
+            users[user] = profile;
+            localStorage.setItem('users', JSON.stringify(users));
+            // Show full profile summary after save
+            showProfileSummary();
+        };
+
+        function showProfileSummary() {
+            const container = document.getElementById('profileContainer');
+            container.innerHTML = `
+                <div class="profile-summary">
+                    <h3>Profile Details</h3>
+                    <img class="profile-summary-img" src="${profile.img ? profile.img : `https://ui-avatars.com/api/?name=${encodeURIComponent(user)}&background=e75480&color=fff`}" alt="Profile Picture">
+                    <div class="profile-summary-row"><b>Username:</b> ${user}</div>
+                    <div class="profile-summary-row"><b>Age:</b> ${profile.age || ''}</div>
+                    <div class="profile-summary-row"><b>Date of Birth:</b> ${profile.dob || ''}</div>
+                    <button class="products-btn" onclick="window.location.href='index.html'">Access Products</button>
+                </div>
+                <span class="logout" onclick="logout()">Logout</span>
+            `;
+        }
+        function logout() {
+            localStorage.removeItem('currentUser');
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        /* Loader Styles */
+        #loader-bg {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(255,255,255,0.95);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.3s;
+        }
+        .loader {
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #e75480;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+    <link rel="stylesheet" href="css/presidential.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration - Lorena Store</title>
+    <link rel="stylesheet" href="css/content.css">
+    <style>
+        body { font-family: Lato, sans-serif; background: #f7f7f7; }
+        .user-container { max-width: 400px; margin: 80px auto; background: #fff; padding: 2em; border-radius: 8px; box-shadow: 0 2px 8px #0001; }
+        h2 { text-align: center; color: #e75480; }
+        input, button { width: 100%; margin: 10px 0; padding: 10px; border-radius: 4px; border: 1px solid #ccc; }
+        button { background: #e75480; color: #fff; border: none; font-weight: bold; cursor: pointer; }
+        .error { color: red; text-align: center; }
+        .switch { text-align: center; margin-top: 10px; }
+        .switch a { color: #e75480; text-decoration: underline; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div id="loader-bg"><div class="loader"></div></div>
+    <div class="user-container">
+        <h2>User Registration</h2>
+        <div id="error" class="error"></div>
+        <input type="text" id="regUser" placeholder="Username" required>
+        <input type="password" id="regPass" placeholder="Password" required>
+        <button onclick="registerUser()">Register</button>
+        <div class="switch">Already have an account? <a onclick="window.location.href='login.html'">Login</a></div>
+    </div>
+    <script>
+        // Hide loader when page is fully loaded
+        window.addEventListener('load', function() {
+            var loader = document.getElementById('loader-bg');
+            if(loader) loader.style.opacity = 0;
+            setTimeout(function() {
+                if(loader) loader.style.display = 'none';
+            }, 400);
+        });
+        function registerUser() {
+            const user = document.getElementById('regUser').value;
+            const pass = document.getElementById('regPass').value;
+            let users = JSON.parse(localStorage.getItem('users') || '{}');
+            if(users[user]) {
+                document.getElementById('error').innerText = 'Username already exists!';
+                return;
+            }
+            users[user] = { password: pass };
+            localStorage.setItem('users', JSON.stringify(users));
+            localStorage.setItem('currentUser', user);
+            window.location.href = 'profile.html';
+        }
+    </script>
+</body>
+</html>

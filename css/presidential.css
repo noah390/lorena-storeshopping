@@ -1,0 +1,146 @@
+/* Lorena Store Presidential Theme */
+body {
+    font-family: 'Lato', 'Roboto', Arial, sans-serif;
+    background: #f7f7fa;
+    color: #222;
+    margin: 0;
+    padding: 0;
+}
+
+header, .profile-header {
+    background: linear-gradient(90deg, #e75480 60%, #ffb347 100%);
+    color: #fff;
+    padding: 1.2em 0 1em 0;
+    text-align: center;
+    box-shadow: 0 2px 8px #0001;
+}
+
+header #shopName, .profile-header .jumia-logo {
+    font-size: 2.2em;
+    font-family: 'Pacifico', cursive;
+    color: #fff;
+    letter-spacing: 2px;
+    font-weight: bold;
+}
+
+nav, #collection {
+    display: flex;
+    justify-content: center;
+    gap: 2em;
+    margin: 1em 0;
+}
+
+nav a, #collection a {
+    color: #fff;
+    font-weight: 500;
+    text-decoration: none;
+    font-size: 1.1em;
+    transition: color 0.2s;
+}
+nav a:hover, #collection a:hover {
+    color: #222;
+}
+
+.hero {
+    background: linear-gradient(90deg, #e75480 60%, #ffb347 100%);
+    color: #fff;
+    padding: 3em 1em 2em 1em;
+    text-align: center;
+    border-radius: 0 0 40px 40px;
+    margin-bottom: 2em;
+    box-shadow: 0 4px 24px #0001;
+}
+.hero h1 {
+    font-size: 2.5em;
+    margin-bottom: 0.5em;
+    font-family: 'Pacifico', cursive;
+}
+.hero p {
+    font-size: 1.3em;
+    margin-bottom: 1.5em;
+}
+.hero .hero-btn {
+    background: #fff;
+    color: #e75480;
+    border: none;
+    border-radius: 30px;
+    padding: 0.8em 2.2em;
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 2px 8px #0001;
+    transition: background 0.2s, color 0.2s;
+}
+.hero .hero-btn:hover {
+    background: #e75480;
+    color: #fff;
+}
+
+.card, #box {
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 2px 12px #0001;
+    padding: 1.2em;
+    margin: 1em auto;
+    max-width: 340px;
+    transition: box-shadow 0.2s, transform 0.2s;
+}
+.card:hover, #box:hover {
+    box-shadow: 0 6px 24px #e7548033;
+    transform: translateY(-4px) scale(1.03);
+}
+.card img, #box img {
+    width: 100%;
+    border-radius: 10px;
+    margin-bottom: 1em;
+}
+.card h3, #box h3 {
+    color: #e75480;
+    margin-bottom: 0.3em;
+}
+.card h4, #box h4 {
+    color: #888;
+    margin-bottom: 0.2em;
+}
+.card h2, #box h2 {
+    color: #ffb347;
+    margin-bottom: 0.5em;
+}
+
+button, .save-btn, .products-btn {
+    background: #e75480;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 12px 28px;
+    font-size: 1.08em;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: 1em;
+    transition: background 0.2s;
+}
+button:hover, .save-btn:hover, .products-btn:hover {
+    background: #222;
+}
+
+footer {
+    background: #fff;
+    border-top: 3px solid #e75480;
+    font-family: 'Lato', sans-serif;
+    color: #222;
+    margin-top: 2em;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+    background: #f7f7fa;
+}
+::-webkit-scrollbar-thumb {
+    background: #e75480;
+    border-radius: 8px;
+}
+
+@media (max-width: 800px) {
+    .hero { border-radius: 0 0 20px 20px; }
+    .card, #box { max-width: 98vw; }
+}
